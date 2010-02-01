@@ -1,0 +1,1 @@
+<? # Any code you want to execute in the head of your page. ?>
