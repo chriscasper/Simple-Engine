@@ -32,7 +32,7 @@ if (isset($_GET['q'])) {
 }
 
 // Split our query string into variables var1 and var2
-$routes = split("/",$dir);
+$routes = explode("/",$dir);
 $routesLength = count($routes);
 $go = $routes[$routesLength-1];
 
