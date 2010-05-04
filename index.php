@@ -1,7 +1,7 @@
 <?php
 /*
 	Simple Engine - A seriously stupid php site framework
-    Copyright (C) 2009 Chris Casper
+    Copyright (C) 2010 Chris Casper
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,44 +17,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Retrieve our query string
-$dir = $_GET['q'];
+include_once("includes/functions.php");
 
 // Site Config
-$siteURL = "http://yourdomain.com";
+$siteURL = "http://localhost/github/simple-engine";
+$siteTitle = "Site Name";
+$siteTitleSeparator = " | ";
 
-// Set Variables
-$dir_find = '/';
-$dir_find_pos = '0';
-$page = "";
-$pageTitle = "";
-$pageTitleBanner = "";
+// Retrieve our query string (sent from apache)
+if (isset($_GET['q'])) {
+  $dir = $_GET['q'];
+} else {
+	$dir = '';
+}
 
 // Split our query string into variables var1 and var2
-$ary = split("/",$dir);
-$var1=$ary[0];
-$var2=$ary[1];
+$routes = split("/",$dir);
+$routesLength = count($routes);
+$go = $routes[$routesLength-1];
 
-// Page logic
-switch ( $var1 ){
-	case page_1:
-		$page = 'page_1';
-		break;
-	case about:
-		$page = 'about';
-		break;
-	case contact:
-		$page = 'contact';
-		break;
-	case sitemap:
-		$page = 'sitemap';
-		break;
-	case copyright:
-		$page = 'copyright';
-		break;
-	default:
-		$page = "home";
+// Set page default for homepage
+if(!$go) {
+	$section = "home";
+	$page = "home";
+} else {
+	$section = $routes[0];
+	$page = "$go";
 }
-// Include the main site template
-include_once("templates/main_template.php");
+
+$pageTitle = ucfirst($page); 
+
+// Include the default template
+$default_template = "main";
+include_once("templates/" . $default_template . ".php");
+
 ?>
