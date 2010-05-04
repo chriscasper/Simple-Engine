@@ -31,13 +31,16 @@ if (isset($_GET['q'])) {
 	$dir = '';
 }
 
-// Split our query string into variables var1 and var2
+// Split our query string into variables
 $routes = explode("/",$dir);
 $routesLength = count($routes);
 $go = $routes[$routesLength-1];
+if($routesLength != '1') {
+	$go = $routes[$routesLength-2];
+}
 
 // Set page default for homepage
-if(!$go) {
+if(!$go && ($routesLength == '1')) {
 	$section = "home";
 	$page = "home";
 } else {
@@ -48,7 +51,7 @@ if(!$go) {
 $pageTitle = ucfirst($page); 
 
 // Include the default template
-$default_template = "main";
-include_once("templates/" . $default_template . ".php");
+$default_template = "jumpstart";
+include_once("templates/" . $default_template . "/index.php");
 
 ?>

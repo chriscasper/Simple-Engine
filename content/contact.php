@@ -1,8 +1,8 @@
 <? // Contact
 
 // File Includes
-include("classes/error.php");
-include("classes/email.php");
+//include("classes/error.php");
+//include("classes/email.php");
 
 // Variables
 $err = array();

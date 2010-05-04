@@ -15,18 +15,20 @@
 			
 			If it can't find either of these, it simply routes to the generic 404 page.
 		*/
-			
+		
 		if(!$routes[0]) {
 			// Default to homepage
-			include("./content/home.php/");	
+			include("./content/home.php");	
 			
 		} else {			
 			// All other pages
 			$loadString = '';
 			for ($i = 0; $i < $routesLength; $i++) {
-				$loadString = $loadString . "/$routes[$i]";
+				if($routes[$i]) {
+					$loadString = $loadString . "/$routes[$i]";
+				}
 			}
-							
+			
 			if(file_exists("./content" . $loadString . ".php")) {
 				// Load PHP file for that page
 				include("./content" . $loadString . ".php/");
