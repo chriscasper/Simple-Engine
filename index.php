@@ -17,44 +17,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-include_once("includes/functions.php");
+// Set the environment. Value should match a relevant "case" option in config
+define( 'ENVIRONMENT', 'LOCAL' );
 
-// Site Config
-$siteURL = "http://localhost/github/simple-engine";
-$siteTitle = "Site Name";
-$siteTitleSeparator = " | ";
+// Using require once so that SE will fail if config doesnt exist
+require_once( 'config.php' );
 
-// Retrieve our query string (sent from apache)
-if (isset($_GET['q'])) {
-  $dir = $_GET['q'];
-} else {
-	$dir = '';
-}
+// Drop in some global helper functions
+include_once( 'includes/system_helpers.php' );
 
-// Split our query string into variables
-$routes = explode("/",$dir);
-$routesLength = count($routes);
-$go = $routes[$routesLength-1];
-if($routesLength != '1') {
-	$go = $routes[$routesLength-2];
-}
+// Drop in some user defined functions
+include_once( 'includes/functions.php' );
 
-// Set page default for homepage
-if(!$go && ($routesLength == '1')) {
-	$section = "home";
-	$page = "home";
-} else {
-	$section = $routes[0];
-	$page = "$go";
-}
 
-$pageTitle = ucfirst($page); 
+// Pull the section and page cars
+initPageVars();
 
-// Include the default template
-$default_template = "jumpstart";
+// Set some defaults
+setPageTitle( SITE_NAME );
+setPageDesc( SITE_DESC_DEFAULT );
+setPageKeywords( SITE_KEYWORDS_DEFAULT );
 
-$yield = loadRoute($page, $routes, $routesLength);
+initPageCSS();
+initPageJS();
 
-include_once("templates/" . $default_template . "/index.php");
 
-?>
+
+// Include the default layout
+setPageLayout( 'basic' );
+
+// Load the page into the page content
+loadRoute( $page, $routes, $routesLength );
+
+// Give it to the user wrapped neatly in a layout
+include_once( 'layouts/' . getPageLayout() . '/index.php' );
+
