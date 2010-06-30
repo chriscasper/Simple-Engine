@@ -32,8 +32,6 @@
 		
 	</head>
 	<body <?php echo 'id="page-' . $page . '" class="section-' . $section . '"'; // Allows you to have per page/section styling if needed. ?>>
-		<? 
-			loadRoute($page, $routes, $routesLength); // loads file or directory based on url
-		?>
+		<?= $yield ?>
 	</body>
 </html>

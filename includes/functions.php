@@ -5,7 +5,8 @@
 	ini_set('display_errors', TRUE);
 	ini_set('display_startup_errors', TRUE);
 
-	function loadRoute($page, $routes, $routesLength) {
+	function loadRoute( $page, $routes, $routesLength )
+	{
 		/*
 			This tiny bit of routing logic below is everything you need for clean urls to function, as many levels deep as you'd like to use.
 			There is nothing that needs modification, basically it looks in the content folder for 2 things:
@@ -15,38 +16,58 @@
 			
 			If it can't find either of these, it simply routes to the generic 404 page.
 		*/
-		
-		if(!$routes[0]) {
+
+    // Start the output buffering - jt
+    ob_start();
+
+    $strReturn = '';
+
+		if( !$routes[0] )
+		{
 			// Default to homepage
-			include("./content/home.php");	
-			
-		} else {			
+			include( './content/home.php' );
+		}
+		else
+		{			
 			// All other pages
 			$loadString = '';
-			for ($i = 0; $i < $routesLength; $i++) {
-				if($routes[$i]) {
-					$loadString = $loadString . "/$routes[$i]";
+
+			for( $i=0; $i < $routesLength; $i++ )
+			{
+				if( $routes[$i] )
+				{
+					$loadString = $loadString . '/' . $routes[$i];
 				}
 			}
 			
-			if(file_exists("./content" . $loadString . ".php")) {
+			if( file_exists( './content' . $loadString . '.php' ))
+			{
 				// Load PHP file for that page
-				include("./content" . $loadString . ".php/");
-				
-			} else {
-				// Load index file within a directory with that name
-				if(file_exists("./content" . $loadString . "/index.php")) {
-					include("./content" . $loadString . "/index.php/");	
-					
-				} else {
-					// 404 Error page
-					@include("./includes/404.php");
-					
-				}
-					
+				include( './content' . $loadString . '.php' );
 			}
-					
+			else
+			{
+				// Load index file within a directory with that name
+				if( file_exists( './content' . $loadString . '/index.php' ))
+				{
+					include( './content' . $loadString . '/index.php' );	
+				}
+				else
+				{
+					// 404 Error page
+					@include( './includes/404.php' );
+				}
+			}	
 		}
-		
+
+    // Capture the output bufering to a variable - jt
+    $strReturn = ob_get_contents();
+
+    // Kill and wipe the output buffer - jt
+    ob_end_clean();
+
+    // Give the output back - jt
+    return $strReturn;
+
 	}
 ?>

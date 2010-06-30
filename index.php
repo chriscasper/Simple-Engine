@@ -1,6 +1,6 @@
 <?php
 /*
-	Simple Engine - A seriously stupid php site framework
+	Simple Engine - A seriously simple php site framework
     Copyright (C) 2010 Chris Casper
 
     This program is free software: you can redistribute it and/or modify
@@ -52,6 +52,9 @@ $pageTitle = ucfirst($page);
 
 // Include the default template
 $default_template = "jumpstart";
+
+$yield = loadRoute($page, $routes, $routesLength);
+
 include_once("templates/" . $default_template . "/index.php");
 
 ?>

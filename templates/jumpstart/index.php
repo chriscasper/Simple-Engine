@@ -37,9 +37,7 @@
 		</div>
 		<div id="content">
 			<div class="inner">
-				<? 
-					loadRoute($page, $routes, $routesLength); // loads file or directory based on url
-				?>
+				<?= $yield ?>
 			</div>
 		</div>
 		<div id="footer">
