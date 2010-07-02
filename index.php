@@ -30,7 +30,7 @@ include_once( 'includes/system_helpers.php' );
 include_once( 'includes/functions.php' );
 
 
-// Pull the section and page cars
+// Pull the section and page vars
 initPageVars();
 
 // Set some defaults
