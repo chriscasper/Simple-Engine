@@ -1,4 +1,4 @@
-<?
+<?php
 /* Page Setup */
 
 setPageTitle( 'Basic SE Page' );

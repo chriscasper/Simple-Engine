@@ -10,7 +10,7 @@
   <link rel="stylesheet" media="all" type="text/css" href="/static/css/reset.css" />
   <link rel="stylesheet" media="all" type="text/css" href="/static/css/layouts/basic/default.css" />
 
-  <?
+  <?php
     $arrCSS = getPageCSS();
 
     foreach( $arrCSS as $strCSS )
@@ -28,7 +28,7 @@
 
 <?= getPageContent(); ?>
 
-<?
+<?php
     $arrJS = getPageJS();
 
     foreach( $arrJS as $strJS )

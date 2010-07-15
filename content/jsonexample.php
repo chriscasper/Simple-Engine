@@ -1,4 +1,4 @@
-<?
+<?php
 /* Page Setup */
 
 /* This is a json sample page. Its pretty straight forward, just build your php object

@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************
 
 Simple Engine Core Helper functions

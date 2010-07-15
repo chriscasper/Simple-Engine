@@ -1,4 +1,4 @@
-<? // Contact
+<?php // Contact
 
 // File Includes
 //include("classes/error.php");
