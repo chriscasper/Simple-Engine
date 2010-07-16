@@ -3,4 +3,4 @@
   header( 'Expires: ' . date( 'D, d M Y H:i:s T' ));
   header( 'Content-type: application/javascript' );
 ?>
-<?= getPageContent(); ?>
+<?php echo(getPageContent()); ?>
