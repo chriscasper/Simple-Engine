@@ -51,5 +51,3 @@ loadRoute( $page, $routes, $routesLength );
 
 // Give it to the user wrapped neatly in a layout
 include_once( 'layouts/' . getPageLayout() . '/index.php' );
-
-// klsjdflkasjdf - git test
