@@ -1,7 +1,0 @@
-Options +FollowSymlinks
-RewriteEngine on
-
-RewriteCond %{REQUEST_URI} !\.(jpg|gif|png|js|css|php|swf)$ [NC]
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ([^&;]*) index.php?q=$1&%{QUERY_STRING} [L]

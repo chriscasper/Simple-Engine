@@ -1,0 +1,26 @@
+// Layout
+$enable-flex: true;
+$enable-rounded: false;
+
+
+// Fonts
+$font-family-sans-serif:     "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:          "Oleo Script", Georgia, "Times New Roman", Times, serif;
+$font-family-monospace:      "Roboto Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+
+
+// Colors
+$brand-base: #1c2227; // Almost-black
+
+$brand-primary: #25b694; // Mint
+$brand-secondary: #d53251; // Pink
+$brand-tertiary: #a4b923; // Lime
+$brand-quadernary: #34c5ca; // Tiffany
+
+$link-color: $brand-primary;
+$link-hover-decoration: none;
+
+
+// Inputs
+$border-width: 0.08rem;
+$input-border: $brand-secondary;
