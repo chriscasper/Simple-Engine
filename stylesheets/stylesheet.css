@@ -30,6 +30,16 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 }
+.logo-h1 {
+	font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+	width: 350px;
+	height: 90px;
+	background: url(../images/logo.png) no-repeat center center;
+}
 ol, ul {
 	list-style: none;
 }
@@ -57,7 +67,7 @@ body {
 }
 
 a {
-  color: #d5000d;
+  color: #FE4365;
 }
 a:hover {
   color: #c5000c;
@@ -111,7 +121,7 @@ a.button {
   font-size: 15px;
   font-weight: bold;
   line-height: 25px;
-  color: #303030;
+  color: #FE4365;
   background: #fdfdfd; /* Old browsers */
   background: -moz-linear-gradient(top,  #fdfdfd 0%, #f2f2f2 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdfdfd), color-stop(100%,#f2f2f2)); /* Chrome,Safari4+ */
@@ -255,7 +265,7 @@ h3 {
   margin-bottom: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: #d5000d;
+  color: #FE4365;
 }
 
 h4 {
