@@ -27,9 +27,21 @@ gulp.task('content', function () {
     .pipe(swig({defaults: { cache: false }}))
     .pipe(rename(function (path) {
       // Lets do some quick modifications for generating a nice SEO structure
-      // Simple exception for the homepage/"index" file
-      path.dirname = path.basename == "index" ? "/" : "/"+path.basename;
-      path.basename = "index";
+
+      if(path.dirname.length > 0 && path.basename == 'index') {
+        // This scenario rewrites our public path for index files in subfolders
+        path.dirname = "/" + path.dirname;
+        path.basename = "index";
+      }
+      else if(path.dirname.length > 0) {
+        // This scenario covers subfolders
+        path.dirname = "/" + path.dirname + "/" + path.basename;
+        path.basename = "index";
+      }
+      else {
+        path.dirname = "/" + path.basename;
+        path.basename = "index";
+      }
     }))
     .pipe(gulp.dest('public'))
     .pipe(notify({ message: 'Finished compiling html'}));
