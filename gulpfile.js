@@ -15,7 +15,7 @@ var gulp        = require('gulp'),
     server      = require('gulp-server-livereload');
 
 // Get our site configuration
-// site.json is availible in every page so you can use some global variables
+// config.json is availible in every page so you can use some global variables
 var getJsonData = function(file) {
   return require('./config.json');
 };
@@ -32,13 +32,11 @@ gulp.task('content', function () {
         // This scenario rewrites our public path for index files in subfolders
         path.dirname = "/" + path.dirname;
         path.basename = "index";
-      }
-      else if(path.dirname.length > 0) {
+      } else if(path.dirname.length > 0) {
         // This scenario covers subfolders
         path.dirname = "/" + path.dirname + "/" + path.basename;
         path.basename = "index";
-      }
-      else {
+      } else {
         path.dirname = "/" + path.basename;
         path.basename = "index";
       }
