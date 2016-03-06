@@ -1,5 +1,5 @@
 # Simple Engine
-A seriously simple static generator!
+Simple Engine is a seriously simple static website engine.
 
 Will be adding more directions and documentation here shortly.
 
