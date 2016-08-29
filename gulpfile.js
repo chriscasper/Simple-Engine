@@ -20,11 +20,17 @@ var getJsonData = function(file) {
   return require('./config.json');
 };
 
+function swallowError(error) {
+  console.error(error.toString());
+  this.emit('end');
+}
+
 // Generate pages for all html files in the content folder
 gulp.task('content', function () {
   return gulp.src(['source/content/**/*.html'])
     .pipe(data(getJsonData))
     .pipe(swig({defaults: { cache: false }}))
+    .on('error', swallowError)
     .pipe(rename(function (path) {
       // Lets do some quick modifications for generating a nice SEO structure
 
@@ -55,6 +61,7 @@ gulp.task('scss', function() {
   return gulp.src('source/scss/styles.scss')
     .pipe(sourcemaps.init())
     .pipe(sass())
+    .on('error', swallowError)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('public/css'))
     .pipe(notify({ message: 'Finished compiling SASS'}));
@@ -65,6 +72,7 @@ gulp.task('js', function() {
   return gulp.src('source/js/**/*.js')
     .pipe(concat('index.js'))
     .pipe(uglify())
+    .on('error', swallowError)
     .pipe(gulp.dest('public/js'))
     .pipe(notify({ message: 'Finished javascript'}));
 });
