@@ -361,8 +361,8 @@ Looking to help? Here are some areas:
 ## ❓ Questions?
 
 - Check [Documentation](README.md)
-- Search [Issues](https://github.com/Huelio/Simple-Engine/issues)
-- Ask in [Discussions](https://github.com/Huelio/Simple-Engine/discussions)
+- Search [Issues](https://github.com/chriscasper/Simple-Engine/issues)
+- Ask in [Discussions](https://github.com/chriscasper/Simple-Engine/discussions)
 
 ## 🙏 Thank You!
 

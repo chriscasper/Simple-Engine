@@ -1,10 +1,10 @@
-# Migration Guide: v2.x to v3.0
+# Migration Guide: 1.x to 2.0
 
-This guide helps you migrate from Simple Engine v2.x (Gulp-based) to v3.0 (modern CLI tool).
+This guide helps you migrate from Simple Engine 1.x (Gulp-based) to 2.0 (modern CLI on npm).
 
-## 🚨 Breaking Changes
+## Breaking Changes
 
-v3.0 is a complete rewrite with breaking changes:
+2.0 is a complete rewrite with breaking changes:
 
 - **Build System**: Gulp → Vite
 - **Templating**: Swig → Nunjucks
@@ -13,29 +13,29 @@ v3.0 is a complete rewrite with breaking changes:
 - **Module System**: CommonJS → ESM
 - **Configuration**: JSON → JavaScript
 
-## 📋 Migration Steps
+## Migration Steps
 
 ### 1. Backup Your Current Site
 
 ```bash
-# Backup your v2.x site
-cp -r my-site my-site-v2-backup
+# Backup your 1.x site
+cp -r my-site my-site-v1-backup
 ```
 
-### 2. Install v3.0
+### 2. Install 2.0 from npm
 
 ```bash
 cd my-site
-npm install simple-engine@3 --save-dev
+npm install simple-engine@2 --save-dev
 ```
 
-### 3. Initialize v3 Structure
+### 3. Initialize a 2.0 Structure
 
-Create a new v3 project to see the structure:
+Create a new project from the published package to see the structure:
 
 ```bash
 cd ..
-npx simple-engine init my-site-v3
+npx simple-engine@2 init my-site-v2
 ```
 
 ### 4. Migrate Configuration
@@ -193,7 +193,7 @@ The syntax is nearly identical, but update extends/includes:
 
 ### 9. Directory Structure Mapping
 
-| v2.x                    | v3.0                |
+| 1.x                    | 2.0                |
 |-------------------------|---------------------|
 | `source/content/`       | `content/`          |
 | `source/layouts/`       | `layouts/`          |
@@ -206,7 +206,7 @@ The syntax is nearly identical, but update extends/includes:
 
 ## 🔄 Feature Comparison
 
-| Feature           | v2.x              | v3.0              |
+| Feature           | 1.x              | 2.0              |
 |-------------------|-------------------|-------------------|
 | Build Tool        | Gulp 3            | Vite              |
 | Templates         | Swig              | Nunjucks          |
@@ -218,7 +218,7 @@ The syntax is nearly identical, but update extends/includes:
 | TypeScript        | ❌                | ✅                |
 | Frontmatter       | ❌                | ✅                |
 
-## 🆕 New Features in v3.0
+## 🆕 New Features in 2.0
 
 ### CLI Commands
 
@@ -270,7 +270,7 @@ Access all pages in templates:
 
 You can migrate gradually:
 
-1. Start with a new v3 project
+1. Start with a new 2.0 project
 2. Copy content one page at a time
 3. Convert HTML to Markdown as you go
 4. Test each page before moving on
@@ -285,7 +285,7 @@ If your v2 layouts are simple, you might reuse them with minimal changes:
 
 ### HTML in Markdown
 
-v3 supports HTML in Markdown files:
+2.0 supports HTML in Markdown files:
 
 ```markdown
 ---
@@ -334,15 +334,15 @@ export default {
 
 ## 📚 Resources
 
-- [v3.0 Documentation](../README.md)
+- [2.0 Documentation](../README.md)
 - [Nunjucks Documentation](https://mozilla.github.io/nunjucks/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Markdown Guide](https://www.markdownguide.org/)
 
 ## 🆘 Need Help?
 
-- [GitHub Issues](https://github.com/Huelio/Simple-Engine/issues)
-- [Discussions](https://github.com/Huelio/Simple-Engine/discussions)
+- [GitHub Issues](https://github.com/chriscasper/Simple-Engine/issues)
+- [Discussions](https://github.com/chriscasper/Simple-Engine/discussions)
 
 ---
 

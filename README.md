@@ -1,8 +1,14 @@
 # Simple Engine
 
-> A seriously simple static site generator - modernized! ⚡
+[![npm version](https://img.shields.io/npm/v/simple-engine.svg)](https://www.npmjs.com/package/simple-engine)
+[![Node.js](https://img.shields.io/node/v/simple-engine.svg)](https://www.npmjs.com/package/simple-engine)
+[![License: MIT](https://img.shields.io/npm/l/simple-engine.svg)](https://www.npmjs.com/package/simple-engine)
 
-Simple Engine is a fast, modern static site generator that lets you build beautiful websites using Markdown and Tailwind CSS. Write content in Markdown, customize layouts with Nunjucks templates, and deploy static HTML with zero runtime dependencies.
+> A seriously simple static site generator
+
+Simple Engine is a fast, modern static site generator that lets you build websites with Markdown and Tailwind CSS. Write content in Markdown, customize layouts with Nunjucks templates, and deploy static HTML with zero runtime dependencies.
+
+**Package:** [npmjs.com/package/simple-engine](https://www.npmjs.com/package/simple-engine)
 
 ## Features
 
@@ -23,16 +29,16 @@ Simple Engine is a fast, modern static site generator that lets you build beauti
 
 ### Using npx (Recommended)
 
-Create a new project without installing anything:
+No global install needed — pull the published package from npm:
 
 ```bash
-npx simple-engine init my-site
+npx simple-engine@latest init my-site
 cd my-site
 npm install
 npm run dev
 ```
 
-Your site is now running at `http://localhost:3000`!
+Your site is now running at `http://localhost:3000`.
 
 ### Global Installation
 
@@ -51,10 +57,17 @@ npm run dev
 
 ## Installation
 
-Add Simple Engine to your project:
+Install from npm as a project dependency:
 
 ```bash
 npm install simple-engine --save-dev
+```
+
+Or pin a version:
+
+```bash
+npm install simple-engine@2 --save-dev
+npx simple-engine@2 --version
 ```
 
 ## CLI Commands
@@ -541,9 +554,9 @@ export default {
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Pull requests welcome.
 
-## Publishing
+## Publishing updates
 
-See [PUBLISHING.md](PUBLISHING.md) for npm publish steps.
+`simple-engine` is published on [npm](https://www.npmjs.com/package/simple-engine). For maintainers publishing a new version, see [PUBLISHING.md](PUBLISHING.md).
 
 ## License
 
@@ -551,13 +564,14 @@ MIT License - see LICENSE file for details
 
 ## Support
 
-- [Documentation](https://github.com/Huelio/Simple-Engine)
-- [Issue Tracker](https://github.com/Huelio/Simple-Engine/issues)
-- [Discussions](https://github.com/Huelio/Simple-Engine/discussions)
+- [npm package](https://www.npmjs.com/package/simple-engine)
+- [GitHub repository](https://github.com/chriscasper/Simple-Engine)
+- [Issue Tracker](https://github.com/chriscasper/Simple-Engine/issues)
+- [Discussions](https://github.com/chriscasper/Simple-Engine/discussions)
 
 ## What's New
 
-Simple Engine is now on a modern 2026 stack:
+Simple Engine 2.0 is on a modern 2026 stack:
 
 - TypeScript + Vite + Tailwind CSS v4
 - Nunjucks templates with Markdown + Shiki
@@ -565,7 +579,7 @@ Simple Engine is now on a modern 2026 stack:
 - SEO + AI discoverability (`llms.txt`, JSON-LD, raw markdown)
 - Validated config/frontmatter and a real default starter template
 
-Migrating from v2? See [MIGRATION.md](MIGRATION.md).
+Migrating from the old Gulp-based 1.x? See [MIGRATION.md](MIGRATION.md).
 
 ---
 

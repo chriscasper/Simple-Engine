@@ -82,12 +82,12 @@ Draft notes from an earlier numbering plan. Shipped as **2.0.0** instead.
 - ❌ SASS preprocessor
 - ❌ jQuery dependencies
 
-### Migration from v2.x
+### Migration from 1.x
 
-v3.0 is a breaking change. To migrate:
+2.0 is a breaking change. To migrate:
 
-1. Install v3.0: `npm install simple-engine@3`
-2. Initialize a new project: `simple init my-new-site`
+1. Install 2.0: `npm install simple-engine@2`
+2. Initialize a new project: `npx simple-engine@2 init my-new-site`
 3. Migrate content from HTML to Markdown
 4. Update layouts from Swig to Nunjucks (syntax is similar)
 5. Replace Bootstrap/SASS with Tailwind CSS
