@@ -1,0 +1,20 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<article class="prose prose-slate prose-lg max-w-none">
+  <header class="not-prose mb-8">
+    <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Blog</p>
+    <h1 class="mt-2 text-4xl font-bold tracking-tight text-slate-900">{{ title }}</h1>
+    {% if date %}
+    <time class="mt-3 block text-sm text-slate-500" datetime="{{ date }}">
+      {{ date | date('MMMM d, yyyy') }}
+    </time>
+    {% endif %}
+    {% if description %}
+    <p class="mt-4 text-lg text-slate-600">{{ description }}</p>
+    {% endif %}
+  </header>
+
+  {{ content | safe }}
+</article>
+{% endblock %}

@@ -1,29 +1,103 @@
 {
-  "name": "SimpleEngine",
-  "description": "A seriously simple static generator!",
-  "version": "2.0.0",
+  "name": "simple-engine",
+  "version": "3.0.0",
+  "description": "A seriously simple static site generator - modernized!",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "simple": "./bin/cli.js",
+    "simple-engine": "./bin/cli.js"
+  },
+  "files": [
+    "dist/*.js",
+    "dist/*.d.ts",
+    "bin",
+    "templates",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/cli.ts",
+    "build": "tsup",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepack": "npm run build",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "release:patch": "npm version patch && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:major": "npm version major && git push --follow-tags",
+    "test:local": "npm link && echo 'Package linked! Test with: simple --version'"
+  },
+  "keywords": [
+    "static-site-generator",
+    "ssg",
+    "static-site",
+    "jamstack",
+    "markdown",
+    "cli",
+    "tailwind",
+    "tailwindcss",
+    "vite",
+    "nunjucks",
+    "blog",
+    "website-builder",
+    "generator",
+    "site-generator",
+    "seo",
+    "llms.txt"
+  ],
+  "homepage": "https://github.com/Huelio/Simple-Engine#readme",
+  "bugs": {
+    "url": "https://github.com/Huelio/Simple-Engine/issues"
+  },
   "author": {
     "name": "Christopher Casper",
-    "email": "chris@huelio.com",
-    "url": "http://huelio.com"
+    "email": "me@christophercasper.com",
+    "url": "https://christophercasper.com"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Huelio/Simple-Engine"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
-    "gulp": "^3.9.0",
-    "gulp-clean": "^0.3.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-data": "^1.2.1",
-    "gulp-front-matter": "^1.0.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-server-livereload": "^1.6.2",
-    "gulp-sourcemaps": "^2.4.0",
-    "gulp-swig": "^0.8.0",
-    "gulp-uglify": "^2.0.0"
+    "@inquirer/prompts": "^7.2.0",
+    "@shikijs/markdown-it": "^2.1.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "chalk": "^5.4.1",
+    "chokidar": "^3.6.0",
+    "commander": "^13.1.0",
+    "date-fns": "^4.1.0",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "nunjucks": "^3.2.4",
+    "ora": "^8.1.1",
+    "shiki": "^2.1.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.0.7",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.10.5",
+    "@types/nunjucks": "^3.2.6",
+    "@typescript-eslint/eslint-plugin": "^8.19.1",
+    "@typescript-eslint/parser": "^8.19.1",
+    "eslint": "^9.17.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.1",
+    "vitest": "^3.0.0"
   }
 }

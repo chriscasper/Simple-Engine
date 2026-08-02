@@ -1,0 +1,30 @@
+# Ignore patterns for npm pack
+# Note: package.json "files" is the allowlist; this is defense-in-depth.
+
+# Source / tooling (not shipped)
+src/
+tests/
+scripts/
+coverage/
+*.test.ts
+*.spec.ts
+*.tsbuildinfo
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+eslint.config.js
+
+# Don't ship source maps in the npm package
+*.map
+**/*.map
+dist/*.map
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

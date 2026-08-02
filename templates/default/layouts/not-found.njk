@@ -1,0 +1,11 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<section class="text-center py-16">
+  <h1 class="text-5xl font-bold tracking-tight text-slate-900">404</h1>
+  <p class="mt-4 text-lg text-slate-600">{{ description or "This page could not be found." }}</p>
+  <p class="mt-8">
+    <a href="/" class="font-medium text-slate-900 underline underline-offset-4">Back home</a>
+  </p>
+</section>
+{% endblock %}

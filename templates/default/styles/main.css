@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  pre {
+    @apply overflow-x-auto rounded-lg;
+  }
+
+  :not(pre) > code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-800;
+  }
+}

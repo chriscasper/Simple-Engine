@@ -1,0 +1,42 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if title %}{{ title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+<meta name="description" content="{{ seo.description or site.description }}">
+{% if seo.noindex %}
+<meta name="robots" content="noindex, nofollow">
+{% else %}
+<meta name="robots" content="index, follow">
+{% endif %}
+<link rel="canonical" href="{{ seo.canonical }}">
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }} RSS" href="{{ '/' | absoluteUrl(site.url) }}feed.xml">
+<link rel="alternate" type="text/markdown" href="{% if page.url == '/' %}{{ '/' | absoluteUrl(site.url) }}index.md{% else %}{{ page.url | absoluteUrl(site.url) }}/index.md{% endif %}">
+
+{# Open Graph #}
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:title" content="{{ title or site.title }}">
+<meta property="og:description" content="{{ seo.description or site.description }}">
+<meta property="og:type" content="{{ seo.type or 'website' }}">
+<meta property="og:url" content="{{ seo.canonical }}">
+{% if seo.image %}
+<meta property="og:image" content="{{ seo.image }}">
+{% endif %}
+{% if site.language %}
+<meta property="og:locale" content="{{ site.language }}">
+{% endif %}
+
+{# Twitter Card #}
+<meta name="twitter:card" content="{% if seo.image %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:title" content="{{ title or site.title }}">
+<meta name="twitter:description" content="{{ seo.description or site.description }}">
+{% if seo.image %}
+<meta name="twitter:image" content="{{ seo.image }}">
+{% endif %}
+
+{# JSON-LD #}
+{% if seo.jsonLd %}
+<script type="application/ld+json">
+{{ seo.jsonLd | json | safe }}
+</script>
+{% endif %}
+
+<link rel="stylesheet" href="/styles/main.css">
