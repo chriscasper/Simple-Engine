@@ -313,6 +313,12 @@ export class SimpleEngine {
     }
 
     const cleanPath = urlPath.startsWith('/') ? urlPath.slice(1) : urlPath;
+
+    // Permalinks that already end in .html (e.g. /404.html) are files, not folders
+    if (cleanPath.endsWith('.html')) {
+      return path.join(outputDir, cleanPath);
+    }
+
     return path.join(outputDir, cleanPath, 'index.html');
   }
 

@@ -33,7 +33,6 @@ export const devCommand = async (options: DevOptions) => {
     const open = options.open ?? config.dev?.open ?? false;
     const outputDir = engine.getOutputDir();
     const stylesDir = path.join(projectDir, config.paths.styles || './styles');
-    const mainCssPath = path.join(stylesDir, 'main.css');
 
     logger.info('Building site...');
     await engine.cleanOutput();
@@ -52,26 +51,52 @@ export const devCommand = async (options: DevOptions) => {
       plugins: [
         ...(viteConfig.plugins || []),
         {
-          name: 'simple-engine-css',
+          name: 'simple-engine-dev',
           configureServer(devServer) {
+            // Serve the Vite-built CSS from dist — transformRequest returns a JS
+            // module and must not be sent as text/css to <link rel="stylesheet">.
+            const builtCssPath = path.join(outputDir, 'styles', 'main.css');
             devServer.middlewares.use(async (req, res, next) => {
               if (req.url === '/styles/main.css' || req.url?.startsWith('/styles/main.css?')) {
-                if (await fileUtils.exists(mainCssPath)) {
-                  // Let Vite transform CSS from the project styles entry
-                  try {
-                    const result = await devServer.transformRequest(
-                      `/@fs${mainCssPath}`
-                    );
-                    if (result) {
-                      res.setHeader('Content-Type', 'text/css');
-                      res.end(result.code);
-                      return;
-                    }
-                  } catch {
-                    // fall through to static file
-                  }
+                if (await fileUtils.exists(builtCssPath)) {
+                  res.setHeader('Content-Type', 'text/css; charset=utf-8');
+                  res.end(await fileUtils.readFile(builtCssPath));
+                  return;
                 }
               }
+
+              const rawUrl = req.url?.split('?')[0] ?? '';
+              const query = req.url?.includes('?')
+                ? req.url.slice(req.url.indexOf('?'))
+                : '';
+
+              // Canonical URLs have no trailing slash (/docs not /docs/).
+              if (rawUrl.length > 1 && rawUrl.endsWith('/')) {
+                const bare = rawUrl.slice(0, -1);
+                const indexPath = path.join(outputDir, bare.slice(1), 'index.html');
+                if (await fileUtils.exists(indexPath)) {
+                  res.statusCode = 302;
+                  res.setHeader('Location', `${bare}${query}`);
+                  res.end();
+                  return;
+                }
+              }
+
+              // Serve directory index.html for clean URLs without a trailing slash.
+              // Vite's default SPA fallback would otherwise return the site root.
+              if (
+                rawUrl.length > 1 &&
+                !rawUrl.endsWith('/') &&
+                !path.extname(rawUrl)
+              ) {
+                const indexPath = path.join(outputDir, rawUrl.slice(1), 'index.html');
+                if (await fileUtils.exists(indexPath)) {
+                  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+                  res.end(await fileUtils.readFile(indexPath));
+                  return;
+                }
+              }
+
               next();
             });
           },

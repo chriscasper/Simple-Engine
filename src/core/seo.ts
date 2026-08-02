@@ -291,10 +291,21 @@ ${items}
 
   private async writeRawMarkdown(pages: ProcessedPage[]): Promise<void> {
     for (const page of pages) {
-      const mdPath =
-        page.url === '/'
-          ? path.join(this.outputDir, 'index.md')
-          : path.join(this.outputDir, page.url.replace(/^\//, ''), 'index.md');
+      let mdPath: string;
+
+      if (page.url === '/') {
+        mdPath = path.join(this.outputDir, 'index.md');
+      } else if (page.url.endsWith('.html')) {
+        // Sibling markdown for file permalinks like /404.html → /404.md
+        const cleanPath = page.url.replace(/^\//, '').replace(/\.html$/, '.md');
+        mdPath = path.join(this.outputDir, cleanPath);
+      } else {
+        mdPath = path.join(
+          this.outputDir,
+          page.url.replace(/^\//, ''),
+          'index.md'
+        );
+      }
 
       const frontmatterLines = [
         '---',
