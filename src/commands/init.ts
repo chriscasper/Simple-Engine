@@ -159,7 +159,7 @@ const writeProjectFiles = async (
       'dev:drafts': 'simple dev --drafts',
     },
     devDependencies: {
-      'simple-engine': '^3.0.0',
+      'simple-engine': '^2.0.0',
       tailwindcss: '^4.0.0',
       '@tailwindcss/vite': '^4.0.0',
       '@tailwindcss/typography': '^0.5.16',

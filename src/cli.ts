@@ -12,7 +12,7 @@ const program = new Command();
 program
   .name('simple')
   .description('A seriously simple static site generator')
-  .version('3.0.0');
+  .version('2.0.0');
 
 program
   .command('init')

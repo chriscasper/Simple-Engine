@@ -2,13 +2,18 @@
 
 All notable changes to Simple Engine will be documented in this file.
 
-## [Unreleased]
+## [2.0.0] - 2026-08-01
+
+### Complete Rewrite
+
+Simple Engine 2.0 replaces the Gulp/Bootstrap stack with a modern TypeScript CLI.
 
 ### Added
 
-- Tailwind CSS v4 via `@tailwindcss/vite` (no PostCSS/autoprefixer required)
+- TypeScript ESM codebase with Commander CLI (`init`, `dev`, `build`, `new`)
+- Vite tooling and Tailwind CSS v4 via `@tailwindcss/vite`
+- Markdown + Nunjucks templates with Shiki syntax highlighting
 - Collections API exposed to templates (`collections.posts`, etc.)
-- Shiki syntax highlighting for Markdown code blocks
 - SEO head partial: canonical, Open Graph, Twitter cards, JSON-LD
 - Build artifacts: `sitemap.xml`, `feed.xml`, `robots.txt`, `llms.txt`
 - Optional `llms-full.txt` and raw markdown endpoints (`index.md` beside HTML)
@@ -30,15 +35,14 @@ All notable changes to Simple Engine will be documented in this file.
 ### Changed
 
 - Node.js engine requirement is now `>=20`
+- Replaced Gulp/Swig/Bootstrap with Vite/Nunjucks/Tailwind
 - Replaced `fs-extra` with `node:fs/promises`
 - Replaced Inquirer with `@inquirer/prompts`
 - Migrated ESLint to flat config (v9)
 
-## [3.0.0] - 2025-10-10
+## [3.0.0] - 2025-10-10 (superseded)
 
-### Complete Rewrite
-
-Simple Engine v3.0 is a ground-up rewrite with modern tooling and best practices.
+Draft notes from an earlier numbering plan. Shipped as **2.0.0** instead.
 
 ### Added
 
@@ -88,7 +92,7 @@ v3.0 is a breaking change. To migrate:
 4. Update layouts from Swig to Nunjucks (syntax is similar)
 5. Replace Bootstrap/SASS with Tailwind CSS
 
-## [2.0.0] - 2016
+## [1.0.0] - 2016
 
 ### Added
 
@@ -101,8 +105,8 @@ v3.0 is a breaking change. To migrate:
 
 ---
 
-[3.0.0]: https://github.com/Huelio/Simple-Engine/releases/tag/v3.0.0
-[2.0.0]: https://github.com/Huelio/Simple-Engine/releases/tag/v2.0.0
+[2.0.0]: https://github.com/chriscasper/Simple-Engine/releases/tag/v2.0.0
+[1.0.0]: https://github.com/chriscasper/Simple-Engine/releases/tag/v1.0.0
 
 
 
