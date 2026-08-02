@@ -8,7 +8,7 @@
 
 Simple Engine is a fast, modern static site generator that lets you build websites with Markdown and Tailwind CSS. Write content in Markdown, customize layouts with Nunjucks templates, and deploy static HTML with zero runtime dependencies.
 
-**Package:** [npmjs.com/package/simple-engine](https://www.npmjs.com/package/simple-engine)
+**Website:** [simpleengine.com](https://simpleengine.com) · **Package:** [npmjs.com/package/simple-engine](https://www.npmjs.com/package/simple-engine)
 
 ## Features
 
@@ -564,6 +564,7 @@ MIT License - see LICENSE file for details
 
 ## Support
 
+- [Website](https://simpleengine.com)
 - [npm package](https://www.npmjs.com/package/simple-engine)
 - [GitHub repository](https://github.com/chriscasper/Simple-Engine)
 - [Issue Tracker](https://github.com/chriscasper/Simple-Engine/issues)

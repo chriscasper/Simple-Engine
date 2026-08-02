@@ -2,6 +2,13 @@
 
 All notable changes to Simple Engine will be documented in this file.
 
+## [2.0.2] - 2026-08-02
+
+### Changed
+
+- Set package `homepage` to https://simpleengine.com
+- Link the website from the README and default template
+
 ## [2.0.0] - 2026-08-01
 
 ### Complete Rewrite
