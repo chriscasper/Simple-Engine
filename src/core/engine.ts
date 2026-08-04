@@ -5,6 +5,7 @@ import { configUtils } from '../utils/config.js';
 import { MarkdownProcessor } from './markdown.js';
 import { TemplateEngine } from './template.js';
 import { SeoGenerator, buildJsonLd } from './seo.js';
+import { generateFavicons, injectFaviconTags } from './favicons.js';
 import type {
   SimpleEngineConfig,
   ProcessedPage,
@@ -35,6 +36,7 @@ export class SimpleEngine {
   private projectDir: string;
   private includeDrafts = false;
   private outputOverride?: string;
+  private faviconTags = '';
 
   constructor(projectDir: string, config?: SimpleEngineConfig) {
     this.projectDir = projectDir;
@@ -226,7 +228,8 @@ export class SimpleEngine {
       },
     };
 
-    return this.template.renderFile(layout, context);
+    const html = await this.template.renderFile(layout, context);
+    return injectFaviconTags(html, this.faviconTags);
   }
 
   async build(options: BuildOptions = {}): Promise<ProcessedPage[]> {
@@ -250,19 +253,26 @@ export class SimpleEngine {
     const pages = await this.collectPages();
     const collections = this.buildCollections(pages);
 
-    // Track written HTML paths so we can prune stale ones later if needed
-    for (const page of pages) {
-      const html = await this.renderPage(page, pages, collections);
-      await fileUtils.writeFile(page.outputPath, html);
-    }
-
-    // Copy static files
+    // Copy static files first so favicon source is available in output,
+    // then generate icon sizes from public/favicon.png|svg.
     const staticDir = path.join(
       this.projectDir,
       this.config.paths.static || 'public'
     );
     if (await fileUtils.exists(staticDir)) {
       await fileUtils.copyDir(staticDir, outputDir);
+    }
+
+    const faviconResult = await generateFavicons(
+      staticDir,
+      outputDir,
+      this.config.site.title
+    );
+    this.faviconTags = faviconResult.tags;
+
+    for (const page of pages) {
+      const html = await this.renderPage(page, pages, collections);
+      await fileUtils.writeFile(page.outputPath, html);
     }
 
     // SEO artifacts

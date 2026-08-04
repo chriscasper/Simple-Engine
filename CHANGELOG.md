@@ -2,6 +2,13 @@
 
 All notable changes to Simple Engine will be documented in this file.
 
+## [2.1.0] - 2026-08-04
+
+### Added
+
+- Favicon generation: drop `public/favicon.png` (512px+) or `public/favicon.svg` and the build produces `favicon.ico`, apple-touch-icon, PWA icons, and `site.webmanifest`
+- Automatic `<link>` injection into every page's `<head>` (skipped when the template already declares favicon markup)
+
 ## [2.0.2] - 2026-08-02
 
 ### Changed

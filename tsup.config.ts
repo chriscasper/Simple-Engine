@@ -15,5 +15,7 @@ export default defineConfig({
     '@tailwindcss/vite',
     'shiki',
     '@shikijs/markdown-it',
+    'sharp',
+    'png-to-ico',
   ],
 });

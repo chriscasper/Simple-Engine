@@ -21,6 +21,7 @@ Simple Engine is a fast, modern static site generator that lets you build websit
 - **Syntax highlighting** — Shiki-powered code blocks
 - **SEO ready** — Canonical URLs, Open Graph, Twitter cards, JSON-LD
 - **AI discoverability** — `llms.txt`, raw markdown endpoints, configurable AI crawler rules
+- **Favicons** — Drop one high-res PNG or SVG; all sizes and markup are generated at build time
 - **Sitemap + RSS** — Generated at build time
 - **Drafts** — Preview unpublished content with `simple dev --drafts`
 - **Zero config defaults** — Configure only when you need to
@@ -146,7 +147,7 @@ my-site/
 │       └── head.njk      # SEO meta, Open Graph, JSON-LD
 ├── styles/
 │   └── main.css          # Tailwind v4 entry (`@import "tailwindcss"`)
-├── public/               # Static files (copied to output)
+├── public/               # Static files (copied to output); add favicon.png here
 ├── dist/                 # Built site (generated)
 ├── simple.config.js
 └── package.json
@@ -381,6 +382,25 @@ In your templates:
 </article>
 {% endblock %}
 ```
+
+## Favicons
+
+Drop a single high-resolution image in `public/` and Simple Engine generates the rest at build time:
+
+- `public/favicon.png` — 512×512 or larger recommended
+- or `public/favicon.svg` — preferred when you have a vector source (SVG wins if both exist)
+
+Generated into the output directory:
+
+| File | Purpose |
+|------|---------|
+| `favicon.ico` | Classic browser tab icon (16/32/48) |
+| `apple-touch-icon.png` | iOS home screen (180×180) |
+| `icon-192.png` / `icon-512.png` | PWA / Android icons |
+| `site.webmanifest` | Web app manifest (`name` from `site.title`) |
+| `icon.svg` | Copied when the source is SVG |
+
+Link tags are injected into every page's `<head>` automatically. If your layout already includes `rel="icon"` or `rel="apple-touch-icon"`, injection is skipped so hand-written markup wins.
 
 ## Styling with Tailwind
 

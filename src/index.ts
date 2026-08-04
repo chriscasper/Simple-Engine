@@ -4,6 +4,11 @@ export { buildCommand } from './commands/build.js';
 export { newCommand } from './commands/new.js';
 export { SimpleEngine } from './core/engine.js';
 export { SeoGenerator, buildJsonLd } from './core/seo.js';
+export {
+  detectFaviconSource,
+  generateFavicons,
+  injectFaviconTags,
+} from './core/favicons.js';
 export type {
   SimpleEngineConfig,
   ProcessedPage,

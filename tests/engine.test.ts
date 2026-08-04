@@ -7,6 +7,12 @@ import { SimpleEngine } from '../src/core/engine.js';
 import { TemplateEngine } from '../src/core/template.js';
 import { MarkdownProcessor } from '../src/core/markdown.js';
 import { SeoGenerator, buildJsonLd } from '../src/core/seo.js';
+import {
+  detectFaviconSource,
+  generateFavicons,
+  injectFaviconTags,
+} from '../src/core/favicons.js';
+import sharp from 'sharp';
 
 describe('fileUtils.slugify', () => {
   it('slugifies titles', () => {
@@ -315,6 +321,273 @@ describe('buildJsonLd', () => {
     };
 
     expect(buildJsonLd(page, config, {})).toEqual({ '@type': 'FAQPage' });
+  });
+});
+
+describe('favicons', () => {
+  it('injects tags before </head>', () => {
+    const html = '<html><head><title>T</title></head><body></body></html>';
+    const tags =
+      '<link rel="icon" href="/favicon.ico" sizes="32x32">\n<link rel="apple-touch-icon" href="/apple-touch-icon.png">';
+    const result = injectFaviconTags(html, tags);
+    expect(result).toContain('rel="icon"');
+    expect(result).toContain('rel="apple-touch-icon"');
+    expect(result.indexOf('rel="icon"')).toBeLessThan(result.indexOf('</head>'));
+  });
+
+  it('skips injection when favicon tags already exist', () => {
+    const html =
+      '<html><head><link rel="icon" href="/custom.ico"></head><body></body></html>';
+    const tags = '<link rel="icon" href="/favicon.ico" sizes="32x32">';
+    expect(injectFaviconTags(html, tags)).toBe(html);
+  });
+
+  it('skips injection when apple-touch-icon already exists', () => {
+    const html =
+      '<html><head><link rel="apple-touch-icon" href="/a.png"></head><body></body></html>';
+    const tags = '<link rel="icon" href="/favicon.ico" sizes="32x32">';
+    expect(injectFaviconTags(html, tags)).toBe(html);
+  });
+
+  it('returns empty when no tags provided', () => {
+    const html = '<html><head></head></html>';
+    expect(injectFaviconTags(html, '')).toBe(html);
+  });
+
+  it('detects svg over png', async () => {
+    const tempDir = path.join(os.tmpdir(), `simple-favicon-detect-${Date.now()}`);
+    await fileUtils.ensureDir(tempDir);
+    await fileUtils.writeFile(path.join(tempDir, 'favicon.png'), 'png');
+    await fileUtils.writeFile(path.join(tempDir, 'favicon.svg'), '<svg></svg>');
+
+    const source = await detectFaviconSource(tempDir);
+    expect(source?.type).toBe('svg');
+
+    await fileUtils.remove(tempDir);
+  });
+
+  it('generates icon set from a PNG source', async () => {
+    const tempDir = path.join(os.tmpdir(), `simple-favicon-gen-${Date.now()}`);
+    const staticDir = path.join(tempDir, 'public');
+    const outputDir = path.join(tempDir, 'dist');
+    await fileUtils.ensureDir(staticDir);
+    await fileUtils.ensureDir(outputDir);
+
+    await sharp({
+      create: {
+        width: 512,
+        height: 512,
+        channels: 4,
+        background: { r: 15, g: 118, b: 110, alpha: 1 },
+      },
+    })
+      .png()
+      .toFile(path.join(staticDir, 'favicon.png'));
+
+    const result = await generateFavicons(staticDir, outputDir, 'Test Site');
+    expect(result.generated).toBe(true);
+    expect(result.tags).toContain('favicon.ico');
+    expect(result.tags).toContain('apple-touch-icon');
+    expect(result.tags).toContain('site.webmanifest');
+    expect(result.tags).not.toContain('icon.svg');
+
+    expect(await fileUtils.exists(path.join(outputDir, 'favicon.ico'))).toBe(true);
+    expect(await fileUtils.exists(path.join(outputDir, 'apple-touch-icon.png'))).toBe(true);
+    expect(await fileUtils.exists(path.join(outputDir, 'icon-192.png'))).toBe(true);
+    expect(await fileUtils.exists(path.join(outputDir, 'icon-512.png'))).toBe(true);
+    expect(await fileUtils.exists(path.join(outputDir, 'site.webmanifest'))).toBe(true);
+
+    const manifest = await fileUtils.readJson<{ name: string }>(
+      path.join(outputDir, 'site.webmanifest')
+    );
+    expect(manifest.name).toBe('Test Site');
+
+    // Second run should skip regeneration (fresh outputs)
+    const again = await generateFavicons(staticDir, outputDir, 'Test Site');
+    expect(again.generated).toBe(false);
+    expect(again.tags).toContain('favicon.ico');
+
+    await fileUtils.remove(tempDir);
+  });
+
+  it('generates SVG icon when source is SVG', async () => {
+    const tempDir = path.join(os.tmpdir(), `simple-favicon-svg-${Date.now()}`);
+    const staticDir = path.join(tempDir, 'public');
+    const outputDir = path.join(tempDir, 'dist');
+    await fileUtils.ensureDir(staticDir);
+    await fileUtils.ensureDir(outputDir);
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+  <rect width="512" height="512" fill="#0f766e"/>
+</svg>`;
+    await fileUtils.writeFile(path.join(staticDir, 'favicon.svg'), svg);
+
+    const result = await generateFavicons(staticDir, outputDir, 'SVG Site');
+    expect(result.generated).toBe(true);
+    expect(result.tags).toContain('icon.svg');
+    expect(await fileUtils.exists(path.join(outputDir, 'icon.svg'))).toBe(true);
+    expect(await fileUtils.exists(path.join(outputDir, 'favicon.ico'))).toBe(true);
+
+    await fileUtils.remove(tempDir);
+  });
+
+  it('no-ops when no favicon source exists', async () => {
+    const tempDir = path.join(os.tmpdir(), `simple-favicon-none-${Date.now()}`);
+    await fileUtils.ensureDir(tempDir);
+    const result = await generateFavicons(tempDir, tempDir, 'Empty');
+    expect(result).toEqual({ tags: '', generated: false });
+    await fileUtils.remove(tempDir);
+  });
+});
+
+describe('integration: favicon build', () => {
+  it('generates icons and injects markup into pages', async () => {
+    const tempDir = path.join(os.tmpdir(), `simple-favicon-build-${Date.now()}`);
+    await fileUtils.ensureDir(tempDir);
+    await fileUtils.ensureDir(path.join(tempDir, 'layouts', 'partials'));
+    await fileUtils.ensureDir(path.join(tempDir, 'content'));
+    await fileUtils.ensureDir(path.join(tempDir, 'public'));
+    await fileUtils.ensureDir(path.join(tempDir, 'styles'));
+
+    await fileUtils.writeFile(
+      path.join(tempDir, 'layouts', 'partials', 'head.njk'),
+      `<title>{{ title }}</title>`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'layouts', 'base.njk'),
+      `<!DOCTYPE html><html><head>{% include "partials/head.njk" %}</head>
+<body>{% block content %}{% endblock %}</body></html>`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'layouts', 'default.njk'),
+      `{% extends "base.njk" %}{% block content %}{{ content | safe }}{% endblock %}`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'content', 'index.md'),
+      `---
+title: Home
+layout: default
+---
+
+# Home
+`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'simple.config.js'),
+      `export default {
+  site: { title: 'Favicon Site', url: 'https://example.com' },
+  paths: {
+    content: './content',
+    layouts: './layouts',
+    output: './dist',
+    styles: './styles',
+    static: './public',
+  },
+  seo: { sitemap: false, rss: false, robots: false, llmsTxt: false, rawMarkdown: false, jsonLd: false },
+};
+`
+    );
+    await fileUtils.writeFile(path.join(tempDir, 'styles', 'main.css'), `@import "tailwindcss";\n`);
+
+    await sharp({
+      create: {
+        width: 512,
+        height: 512,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 1 },
+      },
+    })
+      .png()
+      .toFile(path.join(tempDir, 'public', 'favicon.png'));
+
+    const engine = new SimpleEngine(tempDir);
+    await engine.loadConfig();
+    await engine.cleanOutput();
+    await engine.build();
+
+    expect(await fileUtils.exists(path.join(tempDir, 'dist', 'favicon.ico'))).toBe(true);
+    expect(await fileUtils.exists(path.join(tempDir, 'dist', 'apple-touch-icon.png'))).toBe(true);
+    expect(await fileUtils.exists(path.join(tempDir, 'dist', 'site.webmanifest'))).toBe(true);
+
+    const home = await fileUtils.readFile(path.join(tempDir, 'dist', 'index.html'));
+    expect(home).toContain('rel="icon"');
+    expect(home).toContain('rel="apple-touch-icon"');
+    expect(home).toContain('rel="manifest"');
+
+    await fileUtils.remove(tempDir);
+  });
+
+  it('does not inject when template already has favicon links', async () => {
+    const tempDir = path.join(os.tmpdir(), `simple-favicon-skip-${Date.now()}`);
+    await fileUtils.ensureDir(tempDir);
+    await fileUtils.ensureDir(path.join(tempDir, 'layouts', 'partials'));
+    await fileUtils.ensureDir(path.join(tempDir, 'content'));
+    await fileUtils.ensureDir(path.join(tempDir, 'public'));
+    await fileUtils.ensureDir(path.join(tempDir, 'styles'));
+
+    await fileUtils.writeFile(
+      path.join(tempDir, 'layouts', 'partials', 'head.njk'),
+      `<title>{{ title }}</title>
+<link rel="icon" href="/custom.ico">`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'layouts', 'base.njk'),
+      `<!DOCTYPE html><html><head>{% include "partials/head.njk" %}</head>
+<body>{% block content %}{% endblock %}</body></html>`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'layouts', 'default.njk'),
+      `{% extends "base.njk" %}{% block content %}{{ content | safe }}{% endblock %}`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'content', 'index.md'),
+      `---
+title: Home
+layout: default
+---
+
+# Home
+`
+    );
+    await fileUtils.writeFile(
+      path.join(tempDir, 'simple.config.js'),
+      `export default {
+  site: { title: 'Skip Site', url: 'https://example.com' },
+  paths: {
+    content: './content',
+    layouts: './layouts',
+    output: './dist',
+    styles: './styles',
+    static: './public',
+  },
+  seo: { sitemap: false, rss: false, robots: false, llmsTxt: false, rawMarkdown: false, jsonLd: false },
+};
+`
+    );
+    await fileUtils.writeFile(path.join(tempDir, 'styles', 'main.css'), `@import "tailwindcss";\n`);
+
+    await sharp({
+      create: {
+        width: 512,
+        height: 512,
+        channels: 4,
+        background: { r: 255, g: 0, b: 0, alpha: 1 },
+      },
+    })
+      .png()
+      .toFile(path.join(tempDir, 'public', 'favicon.png'));
+
+    const engine = new SimpleEngine(tempDir);
+    await engine.loadConfig();
+    await engine.cleanOutput();
+    await engine.build();
+
+    const home = await fileUtils.readFile(path.join(tempDir, 'dist', 'index.html'));
+    expect(home).toContain('/custom.ico');
+    expect(home).not.toContain('apple-touch-icon');
+    expect(home).not.toContain('site.webmanifest');
+
+    await fileUtils.remove(tempDir);
   });
 });
 
